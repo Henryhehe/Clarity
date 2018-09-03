@@ -1,0 +1,153 @@
+/*
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/**
+ * Write your model definitions here
+ */
+
+namespace org.example.charities
+
+concept Address {
+  o String unit
+  o String street
+  o String city default = "Toronto"
+  o String country default = "Canada"
+  o String postalCode
+}
+
+abstract participant Actor identified by id {
+  o String id
+  o String name
+  o Address address
+  o String email
+}
+
+participant Donor extends Actor {
+  o Double netWorth
+  o Double taxableIncome
+  --> DonationSlip[] donationSlips optional
+}
+
+/* participant Contact extends Actor {
+  o String position
+} */
+
+participant Beneficiary extends Actor {
+  o Double moneyReceived default = 0.0
+  o Integer goodsReceived default = 0
+}
+
+
+participant Charity extends Actor {
+  // o Contact contact
+  o Double totalHoldings
+  --> Donor[] registeredDonors optional
+  --> DonationSlip[] donationSlips optional
+}
+
+participant Government identified by govId {
+  o String govId default = "CA"
+  o String institutionName default = "CRA"
+  o String location
+  o Address address
+  --> Charity[] registeredCharities optional
+  --> Donor[] registeredTaxpayer optional
+}
+
+// Assets --------------------------------------------------------------------------------------------------------------->
+enum AssetType {
+  o MONEY
+  o GOODS
+}
+
+asset CharitableAsset identified by assetId {
+  o String assetId
+  o String assetName
+  o AssetType type 
+  --> Actor owner
+  // --> Charity holder
+  o Double cadValue
+}
+
+asset DonationSlip identified by sid {
+  o String sid
+  o Double monetaryValue
+  o String locationIssued
+  o DateTime dateIssued
+  --> Charity charity
+  --> Donor donor
+}
+
+// Transactions --------------------------------------------------------------------------------------------------------------->
+
+transaction Donate {
+  --> CharitableAsset donatedAsset
+  o Double quantity
+  --> Donor donor
+  --> Charity charity
+}
+
+transaction FundProjects { 
+  --> CharitableAsset charAsset
+  --> Charity charity
+  o Double quantity
+  --> Beneficiary beneficiary
+}
+
+transaction FileTaxes {
+  o String detail
+  o DateTime date
+  --> Government regulator
+  --> Donor donor
+  o Double donationsDeclared
+  o Double totalIncomeDeclared
+}
+
+transaction RegisterDonor {
+  --> Charity charity
+  --> Donor donor
+  o DateTime date
+}
+
+transaction RegisterCharity {
+  --> Charity charity
+  --> Government government
+  o DateTime date
+}
+
+transaction RegisterTaxpayer {
+  --> Government government
+  --> Actor taxpayer
+}
+// Events --------------------------------------------------------------------------------------------------------------->
+
+event DonationEvent {
+  --> CharitableAsset charAsset
+  --> Donor donor
+  --> Charity charity
+  o String date
+  o String project default = ""
+}
+  
+event RegisterDonorEvent {
+  --> Donor donor
+  --> Charity charity
+  o DateTime date
+}
+
+event RegisterCharityEvent {
+  --> Charity charity
+  --> Government government
+  o DateTime date
+}

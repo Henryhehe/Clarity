@@ -1,0 +1,7 @@
+{
+  "levels": {
+    "application": "INFO",
+    "index": "INFO",
+    "incoming-request": "ERROR"
+  }
+}

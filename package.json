@@ -1,0 +1,28 @@
+{
+  "name": "blockchain-charity-magic",
+  "version": "1.0.0",
+  "description": "Hyperledger Composer applied to a Blockhain network that implements smart contracts for Charity donations",
+  "main": "index.js",
+  "repository": "git@github.ibm.com:Kent-Tsuenchy/blockchain-magic.git",
+  "author": "Sebastian Alvarado <Nixon.Alvarado@ibm.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "compression": "^1.7.2",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.2.1",
+    "morgan": "^1.9.0"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.3",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.8.2"
+  }
+}
